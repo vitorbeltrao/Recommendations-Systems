@@ -25,10 +25,6 @@ There are 1 notebook available here to showcase work related to the above recomm
 
 We also have the folder where the data is contained, in addition to the files used to test our functions that are in the notebook.
 
-## Results<a name="results"></a>
-
-The final web application for this job is available at the following link: https://share.streamlit.io/vitorbeltrao/nlp-disaster-response/app.py
-
 ## Licensing, Authors, Acknowledgements<a name="licensing"></a>
 
 Must give credit to [IBM](https://dataplatform.cloud.ibm.com/login) for the data. Otherwise, feel free to use the code here as you would like!
