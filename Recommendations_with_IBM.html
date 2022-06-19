@@ -15468,17 +15468,22 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
 <span class="sd">   </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># find similar users for this user_id</span>
-    <span class="n">similar_users</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-    
-    <span class="c1"># finding recs</span>
-    <span class="n">recommended_articles_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_user_articles</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">similar_users</span><span class="o">.</span><span class="n">neighbor_id</span><span class="p">]</span>
-    <span class="n">recs</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">recommended_articles_ids</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
-    <span class="n">recs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">recs</span><span class="p">))[:</span><span class="n">m</span><span class="p">]</span>
-    
-    <span class="c1"># finding recs_names</span>
-    <span class="n">recommended_articles_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_user_articles</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">similar_users</span><span class="o">.</span><span class="n">neighbor_id</span><span class="p">]</span>
-    <span class="n">rec_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">recommended_articles_names</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
-    <span class="n">rec_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">rec_names</span><span class="p">))[:</span><span class="n">m</span><span class="p">]</span>
+    <span class="n">neighbors_df</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="n">id_list</span> <span class="o">=</span> <span class="n">neighbors_df</span><span class="p">[</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">recs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">name_ids</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">article_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">][</span><span class="s1">&#39;article_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+
+    <span class="k">for</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">id_list</span><span class="p">:</span>
+        <span class="n">recs</span> <span class="o">+=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">][</span><span class="s1">&#39;article_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">recs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">recs</span><span class="p">))</span>
+    <span class="n">recs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recs</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">article_ids</span><span class="p">]</span>
+
+    <span class="n">rec_all</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">article_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">recs</span><span class="p">)][[</span><span class="s1">&#39;article_id&#39;</span><span class="p">,</span><span class="s1">&#39;title&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">recs</span> <span class="o">=</span> <span class="n">rec_all</span><span class="p">[</span><span class="s1">&#39;article_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">rec_names</span> <span class="o">=</span> <span class="n">rec_all</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     
     <span class="k">return</span> <span class="n">recs</span><span class="p">,</span> <span class="n">rec_names</span>
 </pre></div>
@@ -15521,10 +15526,10 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>The top 10 recommendations for user 20 are the following article ids:
-[&#39;12.0&#39;, &#39;109.0&#39;, &#39;125.0&#39;, &#39;142.0&#39;, &#39;164.0&#39;, &#39;205.0&#39;, &#39;232.0&#39;, &#39;302.0&#39;, &#39;336.0&#39;, &#39;362.0&#39;]
+[&#39;1430.0&#39;, &#39;1314.0&#39;, &#39;1429.0&#39;, &#39;1338.0&#39;, &#39;1276.0&#39;, &#39;1432.0&#39;, &#39;593.0&#39;, &#39;1185.0&#39;, &#39;993.0&#39;, &#39;14.0&#39;]
 
 The top 10 recommendations for user 20 are the following article names:
-[&#39;timeseries data analysis of iot events by using jupyter notebook&#39;, &#39;tensorflow quick tips&#39;, &#39;statistics for hackers&#39;, &#39;neural networks for beginners: popular types and applications&#39;, &#39;learn tensorflow and deep learning together and now!&#39;, &#34;a beginner&#39;s guide to variational methods&#34;, &#39;self-service data preparation with ibm data refinery&#39;, &#39;accelerate your workflow with dsx&#39;, &#39;challenges in deep learning&#39;, &#39;dsx: hybrid mode&#39;]
+[&#39;using pixiedust for fast, flexible, and easier data analysis and experimentation&#39;, &#39;healthcare python streaming application demo&#39;, &#39;use deep learning for image classification&#39;, &#39;ml optimization using cognitive assistant&#39;, &#39;deploy your python model as a restful api&#39;, &#39;visualize data with the matplotlib library&#39;, &#39;upload files to ibm data science experience using the command line&#39;, &#39;classify tumors with machine learning&#39;, &#39;configuring the apache spark sql context&#39;, &#39;got zip code data? prep it for analytics. – ibm watson data lab – medium&#39;]
 </pre>
 </div>
 </div>
