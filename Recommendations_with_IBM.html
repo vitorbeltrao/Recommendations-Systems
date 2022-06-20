@@ -15610,7 +15610,8 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>As this new user does not have any interactions yet, the collaborative filtering approach would not be interesting, as he would not be similar to anyone else. This is a classic "cold start" problem. So the best approach would be: <strong>Rank-Based Recommendations</strong>.</p>
+<p>As this new user does not have any interactions yet, the collaborative filtering approach would not be interesting, as he would not be similar to anyone else. This is a classic "cold start" problem. So the best approach would be: <strong>Rank-Based Recommendations</strong>. That can be done using the get_top_articles function from the Ranked-Based Recommendation part.</p>
+<p>A more personalized method to make recommendations could be content-based recommendations. Recommendations based on the content of the articles.</p>
 
 </div>
 </div>
@@ -15988,6 +15989,8 @@ The top 10 recommendations for user 20 are the following article names:
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><code>2.</code> In this situation, you can use Singular Value Decomposition from <a href="https://docs.scipy.org/doc/numpy-1.14.0/reference/generated/numpy.linalg.svd.html">numpy</a> on the user-item matrix.  Use the cell to perform SVD, and explain why this is different than in the lesson.</p>
+<p>Here we can only use the SVD because it is an array composed of values 1 or 0 (representing whether or not the user interacted with the article).</p>
+<p>In the lesson, we had to use FunkSVD as we got into the details of user ratings, so there were a lot of null values and only FunkSVD can handle this without breaking the code.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -16523,9 +16526,10 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>From the graph of the model-based recommendation method, we can see that we are suffering from a classic overfit.</p>
+<p>From the graph of the model-based recommendation method, we can see that we are suffering from a classic overfitting. There is too much brand new users to make recommendations for (cold start problem) as opposed to users that have some history already. That leads us to believe that the model is overfitting due to the imbalanced proportion and can't generalize well enough.</p>
 <p>Anyway, I think our recommendation methods are much better and more personalized than the current methods.</p>
-<p>To solve the cold start problem, we can solve with Rank-based method, and after the user already has effective data on their consumption, we can use any of the above collaborative filtering methods.</p>
+<p>To solve the cold start problem, we can solve with Rank-based method (developed in PartII of this notebook), and after the user already has effective data on their consumption, we can use any of the above collaborative filtering methods.</p>
+<p>Another way to approach this solution is applying A/B testing on new users. The control group would receive the rank-based recommendations and the experimental group would receive matrix-factorization recommendations.</p>
 
 </div>
 </div>
